@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elbouju <elbouju@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nomoon <nomoon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 23:25:31 by nomoon            #+#    #+#             */
-/*   Updated: 2021/01/11 11:37:41 by elbouju          ###   ########.fr       */
+/*   Updated: 2021/01/11 17:08:24 by nomoon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,78 +50,55 @@ char			*get_env_path(t_env *env, const char *var, size_t len)
 	return (NULL);
 }
 
-// static char		*get_env_path(t_env *env, const char *var, size_t len)
+// int             is_in_env(t_env *env, char *str)
 // {
-// 	printf("var %s\n", var);
-// 	printf("len %zu\n", len);
-// 	char	*oldpwd;
-// 	int		i;
-// 	int		j;
-// 	int		s_alloc;
+//     t_env *tmp;
 
-// 	while (env && env->next != NULL)
+// 	tmp = env;
+// 	while (tmp)
 // 	{
-// 		if (ft_strncmp(env->name, var, len) == 0)
-// 		{
-// 			s_alloc = ft_strlen(env->value) + 4;
-// 			if (!(oldpwd = malloc(sizeof(char) * s_alloc + 1)))
-// 				return (NULL);
-// 			i = 0;
-// 			j = 0;
-// 			while (env->value[i++])
-// 			{
-// 				if (i > (int)len)
-// 					oldpwd[j++] = env->value[i];
-// 			}
-// 			oldpwd[j] = '\0';
-// 			printf("%s\n", oldpwd);
-// 			return (oldpwd);
-// 		}
-// 		env = env->next;
+// 		if (!ft_strcmp(str, tmp->value))
+// 			return (1);
+// 		tmp = tmp->next;
 // 	}
-// 	return (NULL);
+// 	return (0);
 // }
 
-void			env_add(char *oldpwd, t_env *env)
-{
-	export(env, 2, oldpwd);
-}
+// static int		update_oldpwd(t_env *env)
+// {
+// 	char	cwd[PATH_MAX];
+// 	char	*oldpwd;
 
-int             is_in_env(t_env *env, char *str)
-{
-    t_env *tmp;
+// 	if (getcwd(cwd, PATH_MAX) == NULL)
+// 		return (1);
+// 	if (!(oldpwd = ft_strjoin("OLDPWD=", cwd)))
+// 		return (1);
+// 	if (is_in_env(env, oldpwd) == 0)
+// 		change_value(env, oldpwd);
+// 	// ft_memdel(oldpwd);
+// 	return (0);
+// }
 
-	printf("%s", env->name);
-	tmp = env;
-	while (tmp)
-	{
-		if (!ft_strcmp("OLDPWD", tmp->name))
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-static int		update_oldpwd(t_env *env)
-{
-	char	cwd[PATH_MAX];
-	char	*oldpwd;
-
-	if (getcwd(cwd, PATH_MAX) == NULL)
-		return (1);
-	if (!(oldpwd = ft_strjoin("OLDPWD=", cwd)))
-		return (1);
-	if (is_in_env(env, oldpwd) == 0)
-		env_add(oldpwd, env);
-	// ft_memdel(oldpwd);
-	return (0);
-}
+// static int		update_pwd(t_env *env)
+// {
+// 	char	cwd[PATH_MAX];
+// 	char	*pwd;
+	
+// 	if (getcwd(cwd, PATH_MAX) == NULL)
+// 		return (1);
+// 	if (!(pwd = ft_strjoin("PWD=", cwd)))
+// 		return (1);
+// 	if (is_in_env(env, pwd) == 0)
+// 		change_value(env, pwd);
+// 	// ft_memdel(oldpwd);
+// 	return (0);
+// }
 
 static int		go_to_path(int option, t_env *env)
 {
 	int		ret;
 	char	*env_path;
-
+	
 	env_path = NULL;
 	if (option == 0)
 	{
@@ -142,6 +119,7 @@ static int		go_to_path(int option, t_env *env)
 		update_oldpwd(env);
 	}
 	ret = chdir(env_path);
+	update_pwd(env);
 	// ft_memdel(env_path);
 	return (ret);
 }
@@ -149,19 +127,26 @@ static int		go_to_path(int option, t_env *env)
 int				ft_cd(char **args, t_env *env)
 {
 	int		cd_ret;
-
+	char	*tmp;
+	
 	if (!args[1])
 		return (go_to_path(0, env));
 	if (ft_strcmp(args[1], "-") == 0)
 		cd_ret = go_to_path(1, env);
 	else
 	{
+		tmp = get_oldpwd(env);
 		update_oldpwd(env);
 		cd_ret = chdir(args[1]);
+		update_pwd(env);
 		if (cd_ret < 0)
 			cd_ret *= -1;
 		if (cd_ret != 0)
+		{
+			if (tmp)
+				change_value(env, ft_strjoin("OLDPWD=", tmp));
 			print_error(args);
+		}
 	}
 	return (cd_ret);
 }

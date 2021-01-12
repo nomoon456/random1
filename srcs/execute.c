@@ -6,7 +6,7 @@
 /*   By: nomoon <nomoon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 07:19:55 by paulohl           #+#    #+#             */
-/*   Updated: 2020/12/28 23:00:13 by nomoon           ###   ########.fr       */
+/*   Updated: 2021/01/11 16:48:47 by nomoon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,7 @@ int		execute(char *path, t_command *cmd, char **argv, char **envp, t_env *env)
 	pid_t	pid;
 
 	if (is_builtin(path))
-	{
-		printf("1\n");
 		return (builtin_handler(path, cmd, argv, env));
-	}
 	if ((cmd->type_out == '|' || cmd->pipe == PIPE_YES) && pipe(new_pipe))
 		return (-1);
 	if ((pid = fork()) < 0)

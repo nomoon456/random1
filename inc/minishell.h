@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elbouju <elbouju@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nomoon <nomoon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/16 19:39:29 by paulohl           #+#    #+#             */
-/*   Updated: 2021/01/11 11:22:00 by elbouju          ###   ########.fr       */
+/*   Updated: 2021/01/11 17:11:10 by nomoon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,11 @@ int     				unset(t_env *env, char **argv);
 void    print_env_alhasort(t_env *env);
 int				ft_echo(t_env *env, char **args);
 int    export_check(t_env *env, char **argv);
+int             is_in_env(t_env *env, char *str);
+char			*get_oldpwd(t_env *env);
+int		update_oldpwd(t_env *env);
+int		update_pwd(t_env *env);
 int				ft_cd(char **args, t_env *env);
-// int				ft_cd(char **args, t_env *env);
+int     change_value(t_env *env, char *argv);
 
 #endif

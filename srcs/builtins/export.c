@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elbouju <elbouju@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nomoon <nomoon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:40:48 by nomoon            #+#    #+#             */
-/*   Updated: 2021/01/11 11:19:46 by elbouju          ###   ########.fr       */
+/*   Updated: 2021/01/11 16:49:10 by nomoon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,4 +125,5 @@ int     export(t_env *env, int argc, char *argv)
         ft_strlen(argv) - len_env(argv) - 1);
         tmp->next = temp;
     }
+    return (1);
 }
