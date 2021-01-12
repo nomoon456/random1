@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nomoon <nomoon@student.42.fr>              +#+  +:+       +#+        */
+/*   By: elbouju <elbouju@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/16 19:39:29 by paulohl           #+#    #+#             */
-/*   Updated: 2021/01/11 17:11:10 by nomoon           ###   ########.fr       */
+/*   Updated: 2021/01/12 10:45:17 by elbouju          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@
 ** it is set to errno when an error is encountered.
 */
 
-typedef struct			s_env {
+typedef struct s_env {
 	char				*name;
 	char				*value;
 	int					aff;
 	int					sort;
 	// void				*next;
 	struct				s_env *next;
-}						t_env;
+}	t_env;
 
 typedef struct			s_command {
 	char				*cmd;
@@ -80,7 +80,7 @@ int     				export(t_env *env, int argc, char *argv);
 int						ft_pwd(void);
 int						builtin_exec(char *path, t_command *cmd, char **argv, t_env *env);
 int     				unset(t_env *env, char **argv);
-void    print_env_alhasort(t_env *env);
+int    print_env_alhasort(t_env *env);
 int				ft_echo(t_env *env, char **args);
 int    export_check(t_env *env, char **argv);
 int             is_in_env(t_env *env, char *str);
